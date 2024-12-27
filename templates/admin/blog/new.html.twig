@@ -12,6 +12,10 @@
         {{ form_row(form.publishedAt) }}
         {{ form_row(form.tags) }}
 
+        {{ component('blog_search', {
+            form: form
+        }) }}
+
         <button type="submit" class="btn btn-primary">
             <twig:ux:icon name="tabler:save-changes"/> {{ 'label.create_post'|trans }}
         </button>
