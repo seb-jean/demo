@@ -18,12 +18,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: "Checkout code"
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: PHP-CS-Fixer
-              uses: docker://oskarstark/php-cs-fixer-ga
+              uses: docker://ghcr.io/php-cs-fixer/php-cs-fixer:3-php8.2
               with:
-                  args: --diff --dry-run
+                  args: check --diff --using-cache=no
 
     linters:
         name: Linters
@@ -34,7 +34,7 @@ jobs:
 
         steps:
             - name: "Checkout code"
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: "Install PHP with extensions"
               uses: shivammathur/setup-php@v2
@@ -85,7 +85,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2

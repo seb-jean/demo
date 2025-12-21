@@ -12,8 +12,7 @@
 namespace App\Twig;
 
 use Symfony\Component\Intl\Locales;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * See https://symfony.com/doc/current/templating/twig_extension.html.
@@ -22,7 +21,7 @@ use Twig\TwigFunction;
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  * @author Julien ITARD <julienitard@gmail.com>
  */
-final class AppExtension extends AbstractExtension
+final class AppExtension
 {
     /**
      * @var list<array{code: string, name: string}>|null
@@ -34,14 +33,8 @@ final class AppExtension extends AbstractExtension
     public function __construct(
         /** @var string[] */
         private readonly array $enabledLocales,
+        private readonly string $defaultLocale,
     ) {
-    }
-
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('locales', $this->getLocales(...)),
-        ];
     }
 
     /**
@@ -51,6 +44,7 @@ final class AppExtension extends AbstractExtension
      *
      * @return array<int, array<string, string>>
      */
+    #[AsTwigFunction('locales')]
     public function getLocales(): array
     {
         if (null !== $this->locales) {
@@ -64,5 +58,16 @@ final class AppExtension extends AbstractExtension
         }
 
         return $this->locales;
+    }
+
+    /**
+     * Check if the given locale is RTL.
+     */
+    #[AsTwigFunction('is_rtl')]
+    public function isRtl(?string $locale = null): bool
+    {
+        $locale = $locale ?? $this->defaultLocale;
+
+        return \in_array($locale, ['ar', 'fa', 'he', 'ur', 'ps', 'sd'], true);
     }
 }
